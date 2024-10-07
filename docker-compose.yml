@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  pgsql:
+    image: postgres:17.0-alpine
+    ports:
+      - '30001:5432'
+    container_name: 'avall-db'
+    restart: always
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  pg-data:
