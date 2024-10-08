@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [],
-  providers: [PrismaService, ConfigService]
+  providers: [PrismaService, ConfigService],
+  exports: [PrismaService]
 })
 export class PrismaModule { }
