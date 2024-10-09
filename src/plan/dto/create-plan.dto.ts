@@ -1,4 +1,4 @@
-export class PlanDto {
+export class CreatePlanDto {
     "name": string;
     "description": string;
     "monthly_price": string;
