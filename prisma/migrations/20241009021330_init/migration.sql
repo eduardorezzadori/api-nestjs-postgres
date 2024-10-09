@@ -8,9 +8,9 @@ CREATE TABLE "Plan" (
     "duration" VARCHAR(255),
     "limits_id" VARCHAR(255) NOT NULL,
     "resources_id" VARCHAR(255) NOT NULL,
-    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(6),
+    "created_at" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(0),
 
     CONSTRAINT "Plan_pkey" PRIMARY KEY ("id")
 );
