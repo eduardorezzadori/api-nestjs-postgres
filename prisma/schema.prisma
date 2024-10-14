@@ -14,15 +14,22 @@ datasource db {
 }
 
 model Plan {
-  id String                      @id @default(uuid()) @db.Uuid
-  name              String       @db.VarChar(255)
-  description       String?      @db.VarChar(255)
-  monthly_price     String       @db.VarChar(255)
-  annual_price      String       @db.VarChar(255)
-  duration          String?      @db.VarChar(255)
-  limits_id         String       @db.VarChar(255)
-  resources_id      String       @db.VarChar(255)
-  created_at        DateTime     @default(now()) @db.Timestamp(0)
-  updated_at        DateTime     @default(now()) @db.Timestamp(0) @updatedAt
-  deleted_at        DateTime?    @db.Timestamp(0)
+  id            String     @id @default(uuid()) @db.Uuid
+  name          String     @db.VarChar(255)
+  description   String?    @db.VarChar(255)
+  monthly_price String     @db.VarChar(255)
+  annual_price  String     @db.VarChar(255)
+  duration      String?    @db.VarChar(255)
+  created_at    DateTime   @default(now()) @db.Timestamp(0)
+  updated_at    DateTime   @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at    DateTime?  @db.Timestamp(0)
+  limits        PlanLimits @relation(fields: [limits_id], references: [id])
+  limits_id     String     @db.Uuid
+}
+
+model PlanLimits {
+  id           String @id @default(uuid()) @db.Uuid
+  kilowatts    String @db.VarChar(255)
+  instalations String @db.VarChar(255)
+  plan         Plan[]
 }
