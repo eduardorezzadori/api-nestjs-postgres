@@ -25,6 +25,7 @@ model Plan {
   deleted_at    DateTime?  @db.Timestamp(0)
   limits        PlanLimits @relation(fields: [limits_id], references: [id])
   limits_id     String     @db.Uuid
+  user User[]
 }
 
 model PlanLimits {
@@ -32,4 +33,23 @@ model PlanLimits {
   kilowatts    String @db.VarChar(255)
   instalations String @db.VarChar(255)
   plan         Plan[]
+}
+
+model User {
+  id                   String     @id @default(uuid()) @db.Uuid
+  name                 String     @db.VarChar(255)
+  email                String     @db.VarChar(255)
+  password             String     @db.VarChar(255)
+  phone                String?    @db.VarChar(255)
+  address              String?    @db.VarChar(255)
+  birthdate            String     @db.VarChar(255)
+  status               Boolean
+  user_type            String     @db.VarChar(255)
+  payment_type         String?    @db.VarChar(255)
+  created_at           DateTime   @default(now()) @db.Timestamp(0)
+  updated_at           DateTime   @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at           DateTime?  @db.Timestamp(0)
+  activity_plan        Plan?      @relation(fields: [activity_plan_id], references: [id])
+  activity_plan_id     String?    @db.Uuid
+  aquisition_plan_date String?    @db.VarChar(255)
 }
