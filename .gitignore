@@ -1,6 +1,7 @@
 # 
 .docker.env
 .env
+.vscode/
 
 # compiled output
 /dist
