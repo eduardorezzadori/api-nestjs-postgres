@@ -3,12 +3,30 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class UsersService {
     constructor(private prisma: PrismaService) { }
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
+    async hashPassword(password: string): Promise<string> {
+        return await argon2.hash(password);
+    }
+
+    async verifyPassword(hashedPassword: string, password: string): Promise<boolean> {
+        return await argon2.verify(hashedPassword, password);
+    }
+
+    async create(createUserDto: CreateUserDto): Promise<User | string> {
+        const { password, confirmationPassword } = createUserDto;
+
+        if (password != confirmationPassword) { return 'As senhas não conferem!'; }
+
+        createUserDto.password = await this.hashPassword(password);
+        createUserDto.birthdate = new Date(createUserDto.birthdate); // isso aqui ta bem ruim
+
+        delete createUserDto.confirmationPassword;
+
         return await this.prisma.user.create({
             data: createUserDto
         });

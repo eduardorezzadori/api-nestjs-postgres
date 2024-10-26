@@ -42,7 +42,7 @@ model User {
   password             String     @db.VarChar(255)
   phone                String?    @db.VarChar(255)
   address              String?    @db.VarChar(255)
-  birthdate            String     @db.VarChar(255)
+  birthdate            DateTime
   status               Boolean
   user_type            String     @db.VarChar(255)
   payment_type         String?    @db.VarChar(255)
