@@ -96,4 +96,14 @@ export class UsersService {
 
         return 'Usuário removido permanentemente!';
     }
+
+    async findByEmail(email: string): Promise<User | NotFoundException> {
+        const user = await this.prisma.user.findUnique({
+            where: { email: email }
+        });
+
+        if (!user) { return new NotFoundException('Não existe um usuario cadastrado para este e-mail'); }
+
+        return user;
+    }
 }

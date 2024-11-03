@@ -6,9 +6,10 @@ import { PlanModule } from './plan/plan.module';
 import { PrismaService } from './prisma/prisma.service';
 import { PlanLimitsModule } from './plan-limits/plan-limits.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [PrismaModule, PlanModule, PlanLimitsModule, UsersModule],
+  imports: [PrismaModule, PlanModule, PlanLimitsModule, UsersModule, AuthModule],
   controllers: [AppController],
   providers: [AppService]
 })
