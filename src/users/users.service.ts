@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@prisma/client';
@@ -26,6 +26,12 @@ export class UsersService {
         createUserDto.birthdate = new Date(createUserDto.birthdate); // isso aqui ta bem ruim
 
         delete createUserDto.confirmationPassword;
+
+        const emailAlredyUsed = await this.prisma.user.findFirst({
+            where: { email: createUserDto.email }
+        });
+
+        if (emailAlredyUsed) throw new ConflictException('e-mail já cadastrado!');
 
         return await this.prisma.user.create({
             data: createUserDto
