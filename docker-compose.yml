@@ -10,8 +10,9 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: avall
+      POSTGRES_PASSWORD: l!2e5O*@CiM96$
+      POSTGRES_DB: avall
 
 volumes:
-  pg-data:
+  pg-data: {}
