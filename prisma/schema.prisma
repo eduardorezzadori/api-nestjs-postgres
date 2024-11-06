@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,18 +8,18 @@ datasource db {
 }
 
 model Plan {
-  id            String     @id @default(uuid()) @db.Uuid
-  name          String     @db.VarChar(255)
-  description   String?    @db.VarChar(255)
-  monthly_price String     @db.VarChar(255)
-  annual_price  String     @db.VarChar(255)
-  duration      String?    @db.VarChar(255)
-  created_at    DateTime   @default(now()) @db.Timestamp(0)
-  updated_at    DateTime   @default(now()) @updatedAt @db.Timestamp(0)
-  deleted_at    DateTime?  @db.Timestamp(0)
-  limits        PlanLimits @relation(fields: [limits_id], references: [id])
-  limits_id     String     @db.Uuid
-  user User[]
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String          @db.VarChar(255)
+  description   String?         @db.VarChar(255)
+  monthly_price String          @db.VarChar(255)
+  annual_price  String          @db.VarChar(255)
+  duration      String?         @db.VarChar(255)
+  created_at    DateTime        @default(now()) @db.Timestamp(0)
+  updated_at    DateTime        @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at    DateTime?       @db.Timestamp(0)
+  limits_id     String          @db.Uuid
+  limits        PlanLimits      @relation(fields: [limits_id], references: [id])
+  subscriptions Subscriptions[]
 }
 
 model PlanLimits {
@@ -36,20 +30,30 @@ model PlanLimits {
 }
 
 model User {
-  id                   String     @id @default(uuid()) @db.Uuid
-  name                 String     @db.VarChar(255)
-  email                String     @db.VarChar(255) @unique
-  password             String     @db.VarChar(255)
-  phone                String?    @db.VarChar(255)
-  address              String?    @db.VarChar(255)
-  birthdate            DateTime
-  status               Boolean
-  user_type            String     @db.VarChar(255)
-  payment_type         String?    @db.VarChar(255)
-  created_at           DateTime   @default(now()) @db.Timestamp(0)
-  updated_at           DateTime   @default(now()) @updatedAt @db.Timestamp(0)
-  deleted_at           DateTime?  @db.Timestamp(0)
-  activity_plan        Plan?      @relation(fields: [activity_plan_id], references: [id])
-  activity_plan_id     String?    @db.Uuid
-  aquisition_plan_date String?    @db.VarChar(255)
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String          @db.VarChar(255)
+  email         String          @unique @db.VarChar(255)
+  password      String          @db.VarChar(255)
+  phone         String?         @db.VarChar(255)
+  address       String?         @db.VarChar(255)
+  birthdate     DateTime
+  user_type     String          @db.VarChar(255)
+  created_at    DateTime        @default(now()) @db.Timestamp(0)
+  updated_at    DateTime        @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at    DateTime?       @db.Timestamp(0)
+  subscriptions Subscriptions[]
+}
+
+model Subscriptions {
+  id           String    @id @default(uuid()) @db.Uuid
+  user_id      String    @db.Uuid
+  plan_id      String    @db.Uuid
+  payment_type String?   @db.VarChar(255)
+  created_at   DateTime  @default(now()) @db.Timestamp(0)
+  updated_at   DateTime  @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at   DateTime? @db.Timestamp(0)
+  plan         Plan      @relation(fields: [plan_id], references: [id])
+  user         User      @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id, plan_id])
 }
