@@ -55,7 +55,7 @@ export class UsersService {
 
         if (!foundUser) { throw new NotFoundException('Usuário não encontrado!'); }
 
-        const { name, email, phone, address, birthdate, payment_type } = foundUser;
+        const { name, email, phone, address, birthdate } = foundUser;
 
         try {
             name ? name : foundUser.name;
@@ -63,7 +63,6 @@ export class UsersService {
             phone ? phone : foundUser.phone;
             address ? address : foundUser.address;
             birthdate ? birthdate : foundUser.birthdate;
-            payment_type ? payment_type : foundUser.payment_type;
 
             const updatedUser = await this.prisma.user.update({
                 where: { id: id },
