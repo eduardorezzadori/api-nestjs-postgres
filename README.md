@@ -28,8 +28,19 @@
 
 ## Project setup
 
+1. Crie o arquivo .env com o conteúdo do arquivo .env.example;
+2. 
+
 ```bash
 $ npm install
+```
+
+```bash
+$ docker compose up
+```
+
+```bash
+$ npx prisma migrate dev
 ```
 
 ## Compile and run the project
@@ -38,7 +49,7 @@ $ npm install
 # development
 $ npm run start
 
-# watch mode
+# watch mode - meu preferido para desenvolvimento
 $ npm run start:dev
 
 # production mode
