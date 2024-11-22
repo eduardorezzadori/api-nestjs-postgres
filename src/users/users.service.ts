@@ -77,12 +77,12 @@ export class UsersService {
 
     }
 
-    async delete(id: string): Promise<string | NotFoundException> {
+    async delete(id: string): Promise<string> {
         const foundUser = await this.prisma.user.findFirst({
             where: { id: id }
         });
 
-        if (!foundUser) { return new NotFoundException('Usuário não encontrado!'); }
+        if (!foundUser) { throw new NotFoundException('Usuário não encontrado!'); }
 
         try {
             await this.prisma.user.delete({
@@ -96,12 +96,12 @@ export class UsersService {
         return 'Usuário removido permanentemente!';
     }
 
-    async findByEmail(email: string): Promise<User | NotFoundException> {
+    async findByEmail(email: string): Promise<User> {
         const user = await this.prisma.user.findUnique({
             where: { email: email }
         });
 
-        if (!user) { return new NotFoundException('Não existe um usuario cadastrado para este e-mail'); }
+        if (!user) { throw new NotFoundException('Não existe um usuario cadastrado para este e-mail'); }
 
         return user;
     }
