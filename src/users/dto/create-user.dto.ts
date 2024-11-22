@@ -1,14 +1,16 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class CreateUserDto {
-    "name": string;
-    "email": string;
-    "password": string;
-    "confirmationPassword": string;
-    "phone": string;
-    "address": string;
-    "birthdate": Date;
-    "status": boolean;
-    "user_type": string;
-    "payment_type": string;
-    "activity_plan_id": string;
-    "aquisition_plan_date": string;
+    @ApiProperty() "name": string;
+    @ApiProperty() "email": string;
+    @ApiProperty() "password": string;
+    @ApiProperty() "confirmationPassword": string;
+    @ApiProperty() "phone": string;
+    @ApiProperty() "address": string;
+    @ApiProperty() "birthdate": Date;
+    @ApiProperty() "status": boolean;
+    @ApiProperty() "user_type": string;
+    @ApiProperty() "payment_type": string;
+    @ApiProperty() "activity_plan_id": string;
+    @ApiProperty() "aquisition_plan_date": string;
 }

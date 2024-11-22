@@ -3,11 +3,14 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ApiBody, ApiOperation } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
     constructor(private userService: UsersService) { }
 
+    @ApiOperation({ summary: "Cria um usuario" })
+    @ApiBody({ type: CreateUserDto })
     @Post()
     async create(@Body() user: CreateUserDto): Promise<User | string> {
         return await this.userService.create(user);
@@ -23,6 +26,8 @@ export class UsersController {
         return await this.userService.findAll();
     }
 
+    @ApiOperation({ summary: "Atualiza um usuario" })
+    @ApiBody({ type: UpdateUserDto })
     @Patch(':id')
     async update(@Param('id') id: string, @Body() updateUser: UpdateUserDto): Promise<User> {
         return await this.userService.update(id, updateUser);

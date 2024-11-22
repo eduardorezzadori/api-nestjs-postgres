@@ -2,11 +2,14 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { CreatePlanLimitsDto } from './dto/create-plan-limits.dto';
 import { PlanLimitsService } from './plan-limits.service';
 import { PlanLimits } from '@prisma/client';
+import { ApiBody, ApiOperation } from '@nestjs/swagger';
 
 @Controller('plan-limits')
 export class PlanLimitsController {
     constructor(private planLimitsService: PlanLimitsService) { }
 
+    @ApiOperation({ summary: "Cria os limites do plano" })
+    @ApiBody({ type: CreatePlanLimitsDto })
     @Post()
     async create(@Body() createPlanLimitsDto: CreatePlanLimitsDto) {
         return this.planLimitsService.create(createPlanLimitsDto);
@@ -22,6 +25,8 @@ export class PlanLimitsController {
         return this.planLimitsService.findAll();
     }
 
+    @ApiOperation({ summary: "Atualiza os limites do plano" })
+    @ApiBody({ type: CreatePlanLimitsDto })
     @Patch(':id')
     async update(@Param('id') id: string, @Body() createPlanLimitsDto: CreatePlanLimitsDto): Promise<PlanLimits> {
         return this.planLimitsService.update(id, createPlanLimitsDto);
