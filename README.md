@@ -43,6 +43,8 @@ $ docker compose up
 $ npx prisma migrate dev
 ```
 
+3. Swagger: http://localhost:3000/api/docs 
+
 ## Compile and run the project
 
 ```bash

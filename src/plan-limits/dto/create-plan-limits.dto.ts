@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePlanLimitsDto {
-    @ApiProperty() "kilowatts": string;
-    @ApiProperty() "instalations": string;
+  @ApiProperty() 'kilowatts': string;
+  @ApiProperty() 'instalations': string;
 }
