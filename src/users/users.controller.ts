@@ -12,12 +12,14 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
+import { Public } from 'src/auth/isPublicDecorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UsersService) { }
 
+  @Public()
   @ApiOperation({ summary: 'Cria um usuario' })
   @ApiBody({ type: CreateUserDto })
   @Post()
@@ -25,16 +27,19 @@ export class UsersController {
     return await this.userService.create(user);
   }
 
+  @ApiBearerAuth()
   @Get(':id')
   async find(@Param('id') id: string): Promise<User> {
     return await this.userService.find(id);
   }
 
+  @ApiBearerAuth()
   @Get()
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Atualiza um usuario' })
   @ApiBody({ type: UpdateUserDto })
   @Patch(':id')
@@ -45,6 +50,7 @@ export class UsersController {
     return await this.userService.update(id, updateUser);
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<string | NotFoundException> {
     return await this.userService.delete(id);

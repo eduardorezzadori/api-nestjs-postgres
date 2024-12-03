@@ -8,13 +8,14 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { signInDto } from './dto/signIn.dto';
-import { AuthGuard } from './auth.guard';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
+import { Public } from './isPublicDecorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
+  @Public()
   @ApiOperation({
     summary: 'Executa o login para usuarios previamente cadastrados',
   })
@@ -24,10 +25,10 @@ export class AuthController {
     return this.authService.signIn(signIn);
   }
 
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Retorna as informações do usuario contidas no token',
   })
-  @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

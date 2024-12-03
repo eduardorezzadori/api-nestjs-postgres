@@ -10,12 +10,13 @@ import {
 import { CreatePlanLimitsDto } from './dto/create-plan-limits.dto';
 import { PlanLimitsService } from './plan-limits.service';
 import { PlanLimits } from '@prisma/client';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 
 @Controller('plan-limits')
 export class PlanLimitsController {
-  constructor(private planLimitsService: PlanLimitsService) {}
+  constructor(private planLimitsService: PlanLimitsService) { }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Cria os limites do plano' })
   @ApiBody({ type: CreatePlanLimitsDto })
   @Post()
@@ -23,16 +24,19 @@ export class PlanLimitsController {
     return this.planLimitsService.create(createPlanLimitsDto);
   }
 
+  @ApiBearerAuth()
   @Get(':id')
   async find(@Param('id') id: string): Promise<PlanLimits> {
     return this.planLimitsService.find(id);
   }
 
+  @ApiBearerAuth()
   @Get()
   async findAll(): Promise<PlanLimits[]> {
     return this.planLimitsService.findAll();
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Atualiza os limites do plano' })
   @ApiBody({ type: CreatePlanLimitsDto })
   @Patch(':id')
@@ -43,6 +47,7 @@ export class PlanLimitsController {
     return this.planLimitsService.update(id, createPlanLimitsDto);
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<string> {
     return this.planLimitsService.remove(id);

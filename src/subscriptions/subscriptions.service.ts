@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Subscriptions } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSubsDto } from './dto/create-subs.dto';
@@ -7,14 +7,38 @@ import { CreateSubsDto } from './dto/create-subs.dto';
 export class SubscriptionsService {
     constructor(private prisma: PrismaService) { }
 
-    async create(createSubsDto: CreateSubsDto): Promise<Subscriptions> {
+    async subscribe(createSubsDto: CreateSubsDto): Promise<Subscriptions> {
+
+        const { user_id, plan_id, payment_type } = createSubsDto; 
+
+        const foundSubs = await this.prisma.subscriptions.findFirst({
+            where: {
+                user_id: user_id,
+                plan_id: plan_id
+            }
+        })
+
+        if (foundSubs){
+            if (!foundSubs.deleted_at) {
+                throw new ConflictException('O usuário já possui esse plano!');
+
+            } else {
+
+                return await this.prisma.subscriptions.update({
+                    where: { id: foundSubs.id },
+                    data: { deleted_at: null },
+                });
+
+            }
+        }
+        
         return await this.prisma.subscriptions.create({
             data: createSubsDto,
         });
     }
 
-    async unsubscribe(id: string, createSubsDto: CreateSubsDto): Promise<Subscriptions> {
-        createSubsDto.deleted_at = new Date();
+    async unsubscribe(id: string): Promise<Subscriptions> {
+        const deleted_at = new Date();
 
         const foundSubs = await this.prisma.subscriptions.findUnique({
             where: { id: id },
@@ -26,7 +50,7 @@ export class SubscriptionsService {
 
         return await this.prisma.subscriptions.update({
             where: { id: id },
-            data: createSubsDto,
+            data: { deleted_at: deleted_at },
         });
     }
 
