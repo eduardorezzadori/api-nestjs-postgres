@@ -1,23 +1,6 @@
 version: '3'
 
 services:
-  nest-api:
-    container_name: nest-api
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: builder
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run start
-    ports:
-      - 3000:3000
-    restart: always
-    depends_on:
-      - pgsql
-    env_file:
-      - .docker.env
   pgsql:
     image: postgres:17.0-alpine
     ports:
@@ -30,6 +13,23 @@ services:
       POSTGRES_USER: avall
       POSTGRES_PASSWORD: l!2e5O*@CiM96$
       POSTGRES_DB: avall
+  # nest-api:
+  #   container_name: nest-api
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: builder
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   command: npm run start
+  #   ports:
+  #     - 3000:3000
+  #   restart: always
+  #   depends_on:
+  #     - pgsql
+  #   env_file:
+  #     - .docker.env
 
 volumes:
   pg-data: {}
