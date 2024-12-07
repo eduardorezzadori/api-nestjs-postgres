@@ -10,18 +10,18 @@ export class SubscriptionsController {
     @ApiBearerAuth()
     @Post('subscribe')
     async subscribe(@Body() createSubsDto: CreateSubsDto) {
-        return this.subscriptionsService.subscribe(createSubsDto)
+        return await this.subscriptionsService.subscribe(createSubsDto)
     }
 
     @ApiBearerAuth()
     @Post('unsubscribe/:id')
     async unsubscribe(@Param('id') id: string) {
-        return this.subscriptionsService.unsubscribe(id)
+        return await this.subscriptionsService.unsubscribe(id)
     }
 
     @ApiBearerAuth()
     @Get()
     async findAll() {
-        return this.subscriptionsService.findAll()
+        return await this.subscriptionsService.findAll()
     }
 }

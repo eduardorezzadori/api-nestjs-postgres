@@ -21,8 +21,8 @@ export class AuthController {
   })
   @ApiBody({ type: signInDto })
   @Post('login')
-  signIn(@Body() signIn: signInDto) {
-    return this.authService.signIn(signIn);
+  async signIn(@Body() signIn: signInDto) {
+    return await this.authService.signIn(signIn);
   }
 
   @ApiBearerAuth()

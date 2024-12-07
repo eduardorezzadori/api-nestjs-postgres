@@ -19,7 +19,7 @@ export class PlanService {
   }
 
   async getAll(): Promise<Plan[]> {
-    return this.prisma.plan.findMany();
+    return await this.prisma.plan.findMany();
   }
 
   async get(id: string): Promise<Plan> {

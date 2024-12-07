@@ -22,20 +22,20 @@ export class PlanController {
   @ApiOperation({ summary: 'Cria um plano' })
   @ApiBody({ type: CreatePlanDto })
   @Post()
-  create(@Body() createPlan: CreatePlanDto): Promise<Plan> {
-    return this.planService.createPlan(createPlan);
+  async create(@Body() createPlan: CreatePlanDto): Promise<Plan> {
+    return await this.planService.createPlan(createPlan);
   }
 
   @Public()
   @Get()
-  findAll(): Promise<Plan[]> {
-    return this.planService.getAll();
+  async findAll(): Promise<Plan[]> {
+    return await this.planService.getAll();
   }
 
   @ApiBearerAuth()
   @Get(':id')
   async find(@Param('id') id: string): Promise<Plan> {
-    return this.planService.get(id);
+    return await this.planService.get(id);
   }
 
   @ApiBearerAuth()
@@ -43,12 +43,12 @@ export class PlanController {
   @ApiBody({ type: UpdatePlanDto })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updatePlanDto: UpdatePlanDto) {
-    return this.planService.update(id, updatePlanDto);
+    return await this.planService.update(id, updatePlanDto);
   }
 
   @ApiBearerAuth()
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<string> {
-    return this.planService.remove(id);
+    return await this.planService.remove(id);
   }
 }
