@@ -9,7 +9,4 @@ export class CreateUserDto {
   @ApiProperty() 'address': string;
   @ApiProperty() 'birthdate': Date;
   @ApiProperty() 'user_type': string;
-  @ApiProperty() 'payment_type': string;
-  @ApiProperty() 'activity_plan_id': string;
-  @ApiProperty() 'aquisition_plan_date': string;
 }
