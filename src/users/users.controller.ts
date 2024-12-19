@@ -52,7 +52,7 @@ export class UsersController {
 
   @ApiBearerAuth()
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<string | NotFoundException> {
-    return await this.userService.delete(id);
+  async delete(@Param('id') id: string): Promise<User> {
+    return await this.userService.remove(id);
   }
 }

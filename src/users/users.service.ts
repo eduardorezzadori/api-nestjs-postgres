@@ -11,7 +11,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async hashPassword(password: string): Promise<string> {
     return await argon2.hash(password);
@@ -40,7 +40,18 @@ export class UsersService {
       where: { email: createUserDto.email },
     });
 
-    if (emailAlredyUsed) throw new ConflictException('e-mail já cadastrado!');
+    if (emailAlredyUsed) {
+      if (!emailAlredyUsed.deleted_at) {
+        throw new ConflictException('e-mail já cadastrado!');
+
+      } else {
+        return await this.prisma.user.update({
+          where: { id: emailAlredyUsed.id },
+          data: { ...createUserDto, deleted_at: null },
+        });
+
+      }
+    }
 
     return await this.prisma.user.create({
       data: createUserDto,
@@ -48,18 +59,32 @@ export class UsersService {
   }
 
   async find(id: string): Promise<User> {
-    return await this.prisma.user.findUnique({
-      where: { id: id },
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id,
+        deleted_at: null,
+      },
     });
+
+    if (!user) { throw new NotFoundException('Usuário não encontrado!'); }
+
+    return user;
   }
 
   async findAll(): Promise<User[]> {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({
+      where: {
+        deleted_at: null,
+      },
+    });
   }
 
   async update(id: string, updateUser: UpdateUserDto): Promise<User> {
     const foundUser = await this.prisma.user.findUnique({
-      where: { id: id },
+      where: {
+        id: id,
+        deleted_at: null,
+      },
     });
 
     if (!foundUser) {
@@ -88,7 +113,10 @@ export class UsersService {
 
   async delete(id: string): Promise<string> {
     const foundUser = await this.prisma.user.findFirst({
-      where: { id: id },
+      where: {
+        id: id,
+        deleted_at: null,
+      },
     });
 
     if (!foundUser) {
@@ -106,9 +134,37 @@ export class UsersService {
     return 'Usuário removido permanentemente!';
   }
 
+  async remove(id: string): Promise<User> {
+    const deleted_at = new Date();
+
+    const foundUser = await this.prisma.user.findFirst({
+      where: {
+        id: id,
+        deleted_at: null,
+      }
+    })
+
+    if (!foundUser) {
+      throw new NotFoundException('O usuário não foi encontrado!')
+    }
+
+    try {
+      return await this.prisma.user.update({
+        where: { id: id },
+        data: { deleted_at: deleted_at },
+      });
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findByEmail(email: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
-      where: { email: email },
+      where: {
+        email: email,
+        deleted_at: null,
+      },
     });
 
     if (!user) {

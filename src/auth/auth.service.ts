@@ -20,7 +20,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(email);
 
     if (user instanceof NotFoundException) {
-      return user;
+      throw new NotFoundException('Usuário nao encontrado!');
     }
 
     const autorized = await this.usersService.verifyPassword(

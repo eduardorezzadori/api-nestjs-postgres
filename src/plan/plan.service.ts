@@ -6,7 +6,7 @@ import { UpdatePlanDto } from './dto/update-plan.dto';
 
 @Injectable()
 export class PlanService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async createPlan(createPlan: CreatePlanDto): Promise<Plan> {
     try {
@@ -19,13 +19,26 @@ export class PlanService {
   }
 
   async getAll(): Promise<Plan[]> {
-    return await this.prisma.plan.findMany();
+    return await this.prisma.plan.findMany({
+      where: {
+        deleted_at: null,
+      },
+    });
   }
 
   async get(id: string): Promise<Plan> {
-    return this.prisma.plan.findUnique({
-      where: { id: id },
+    const plan = await this.prisma.plan.findUnique({
+      where: {
+        id: id,
+        deleted_at: null,
+      },
     });
+
+    if (!plan) {
+      throw new NotFoundException('Plano nao encontrado!');
+    }
+
+    return plan;
   }
 
   async update(id: string, updatePlanDto: UpdatePlanDto): Promise<Plan> {
@@ -39,7 +52,10 @@ export class PlanService {
 
     try {
       const foundPlan = await this.prisma.plan.findUnique({
-        where: { id: id },
+        where: {
+          id: id,
+          deleted_at: null,
+        },
       });
 
       if (!foundPlan) throw new NotFoundException('Plano não encontrado!');
@@ -66,13 +82,17 @@ export class PlanService {
   async remove(id: string) {
     try {
       const foundPlan = await this.prisma.plan.findFirst({
-        where: { id: id },
+        where: {
+          id: id,
+          deleted_at: null,
+        },
       });
 
       if (!foundPlan) throw new NotFoundException('Plano não encontrado!');
 
-      await this.prisma.plan.delete({
+      await this.prisma.plan.update({
         where: { id: id },
+        data: { deleted_at: new Date() },
       });
 
       return 'Plano removido com sucesso!';
