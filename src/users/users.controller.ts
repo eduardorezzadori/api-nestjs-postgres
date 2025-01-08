@@ -7,6 +7,8 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -23,6 +25,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Cria um usuario' })
   @ApiBody({ type: CreateUserDto })
   @Post()
+  @UsePipes(new ValidationPipe())
   async create(@Body() user: CreateUserDto): Promise<User | string> {
     return await this.userService.create(user);
   }
