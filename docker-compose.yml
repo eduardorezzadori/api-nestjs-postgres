@@ -5,14 +5,14 @@ services:
     image: postgres:17.0-alpine
     ports:
       - '30001:5432'
-    container_name: 'avall-db'
+    container_name: 'pg-db'
     restart: always
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: avall
-      POSTGRES_PASSWORD: l!2e5O*@CiM96$
-      POSTGRES_DB: avall
+      POSTGRES_USER: pg
+      POSTGRES_PASSWORD: db-pass
+      POSTGRES_DB: pg
   nest-api:
     container_name: nest-api
     build:
